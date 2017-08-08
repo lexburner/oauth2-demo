@@ -1,5 +1,5 @@
 # oauth2-demo
-Re：Re：从零开始的Spring Security Oauth2（一）
+Re：从零开始的Spring Security Oauth2（一）
 
 ##前言
 今天来聊聊一个接口对接的场景，A厂家有一套HTTP接口需要提供给B厂家使用，由于是外网环境，所以需要有一套安全机制保障，这个时候oauth2就可以作为一个方案。
