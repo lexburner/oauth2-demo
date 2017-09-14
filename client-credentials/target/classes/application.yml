@@ -20,7 +20,7 @@ spring:
 #    jdbc: error
 #    jdbc.sqltiming: info
 
-security:
-  oauth2:
-    resource:
-      filter-order: 3
+#security:
+#  oauth2:
+#    resource:
+#      filter-order: 3
