@@ -4,6 +4,7 @@ package sinosoftsh.security.client.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -85,7 +86,9 @@ public class OAuth2ServerConfig {
         public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
             endpoints
                     .tokenStore(new RedisTokenStore(redisConnectionFactory))
-                    .authenticationManager(authenticationManager);
+                    .authenticationManager(authenticationManager)
+                    // 2018-4-3 增加配置，允许 GET、POST 请求获取 token，即访问端点：oauth/token
+                    .allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST);
         }
 
         @Override
