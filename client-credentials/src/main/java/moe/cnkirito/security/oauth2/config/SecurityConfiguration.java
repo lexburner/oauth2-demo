@@ -1,4 +1,4 @@
-package sinosoftsh.security.client.config;
+package moe.cnkirito.security.oauth2.config;
 
 
 import org.springframework.context.annotation.Bean;

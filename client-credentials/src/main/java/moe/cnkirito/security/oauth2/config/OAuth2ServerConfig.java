@@ -1,4 +1,4 @@
-package sinosoftsh.security.client.config;
+package moe.cnkirito.security.oauth2.config;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,13 +72,13 @@ public class OAuth2ServerConfig {
                     .resourceIds(DEMO_RESOURCE_ID)
                     .authorizedGrantTypes("client_credentials", "refresh_token")
                     .scopes("select")
-                    .authorities("client")
+                    .authorities("oauth2")
                     .secret("123456")
                     .and().withClient("client_2")
                     .resourceIds(DEMO_RESOURCE_ID)
                     .authorizedGrantTypes("password", "refresh_token")
                     .scopes("select")
-                    .authorities("client")
+                    .authorities("oauth2")
                     .secret("123456");
         }
 

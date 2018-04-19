@@ -1,5 +1,53 @@
+2018-4-19 日更新
+# springboot 2.0使用spring-security-oauth2的迁移指南
+
+有朋友使用了 springboot2.0 之后发现原来的demo不能用了，我调试了下，发现springboot2.0和spring5的改动还是挺多的，帮大家踩下坑
+
+## 改动一 暴露AuthenticationManager
+
+springboot2.0 的自动配置发生略微的变更，原先的自动配置现在需要通过@Bean暴露，否则你会得到AuthenticationManager找不到的异常
+```
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        AuthenticationManager manager = super.authenticationManagerBean();
+        return manager;
+    }
+```
+
+https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.0-Migration-Guide
+查看 Security 相关的改动
+
+## 改动二 添加PasswordEncoder
+
+如果你得到这个异常
+
+java.lang.IllegalArgumentException: There is no PasswordEncoder mapped for the id "null"
+
+```
+    @Bean
+    PasswordEncoder passwordEncoder(){
+        return NoOpPasswordEncoder.getInstance();
+    }
+```
+springboot2.0 需要增加一个加密器，原来的 plainTextPasswordEncoder 新版本被移除
+了解细节戳这里：https://docs.spring.io/spring-security/site/docs/5.0.4.RELEASE/reference/htmlsingle/#10.3.2 DelegatingPasswordEncoder
+
+## 改动三 注意Redis的版本
+
+如果你在使用新版本的oauth2时发现有redis的相关报错，如redis-client找不到相应的接口，序列化问题时，请注意下 spring-security-oauth2 的版本
+务必高于 2.3.2.RELEASE，这是官方的一个bug，参考 https://github.com/spring-projects/spring-security-oauth/issues/1335
+
+```
+    <dependency>
+        <groupId>org.springframework.security.oauth</groupId>
+        <artifactId>spring-security-oauth2</artifactId>
+        <version>2.3.2.RELEASE</version>
+    </dependency>
+```
+
 # oauth2-demo
-Re：从零开始的Spring Security Oauth2（一）
+Re：从零开始的Spring Security Oauth2
 
 ## 前言
 今天来聊聊一个接口对接的场景，A厂家有一套HTTP接口需要提供给B厂家使用，由于是外网环境，所以需要有一套安全机制保障，这个时候oauth2就可以作为一个方案。

@@ -4,19 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>sinosoftsh</groupId>
+    <groupId>moe.cnkirito</groupId>
     <artifactId>oauth2-demo</artifactId>
     <version>1.0</version>
     <modules>
         <module>client-credentials</module>
+        <module>client-credentials-springboot2</module>
     </modules>
     <packaging>pom</packaging>
 
-
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.4.RELEASE</version>
-    </parent>
 
 </project>
