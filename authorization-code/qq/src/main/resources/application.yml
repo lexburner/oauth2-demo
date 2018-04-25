@@ -1,0 +1,9 @@
+server:
+  port: 8080
+
+spring:
+  redis:
+    host: 127.0.0.1
+    database: 0
+
+logging.level.org.springframework.security: DEBUG

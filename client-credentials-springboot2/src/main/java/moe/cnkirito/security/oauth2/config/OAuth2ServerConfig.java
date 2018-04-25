@@ -93,8 +93,7 @@ public class OAuth2ServerConfig {
         @Override
         public void configure(AuthorizationServerSecurityConfigurer oauthServer) {
             //允许表单认证
-            oauthServer.allowFormAuthenticationForClients()
-            ;
+            oauthServer.allowFormAuthenticationForClients();
         }
 
     }

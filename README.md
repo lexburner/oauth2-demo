@@ -1,3 +1,14 @@
+2018-4-25 日更新
+
+## 新增授权码（authorization_code）模式配置示例
+
+尝试访问获取token
+http://localhost:8080/oauth/authorize?client_id=aiqiyi&response_type=code&redirect_uri=http://localhost:8081/aiqiyi/qq/redirect
+
+具体工作原理介绍有空再更新
+
+在 springboot2.0 下会有问题，还没有定位到原因，建议 springboot 1.0 下使用
+
 2018-4-19 日更新
 # springboot 2.0使用spring-security-oauth2的迁移指南
 

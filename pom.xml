@@ -10,6 +10,7 @@
     <modules>
         <module>client-credentials</module>
         <module>client-credentials-springboot2</module>
+        <module>authorization-code</module>
     </modules>
     <packaging>pom</packaging>
 
