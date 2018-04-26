@@ -9,3 +9,5 @@ target/
 
 ### Docker ###
 data/*
+
+.DS_Store
