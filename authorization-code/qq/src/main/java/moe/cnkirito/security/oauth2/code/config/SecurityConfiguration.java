@@ -1,9 +1,11 @@
 package moe.cnkirito.security.oauth2.code.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -29,7 +31,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
 //    @Autowired
-//    public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
+//    public void globalConifg(AuthenticationManagerBuilder auth) throws Exception {
 //        auth.inMemoryAuthentication()
 //                .withUser("250577914").password("123456").authorities("USER").and()
 //                .withUser("920129126").password("123456").authorities("USER");
