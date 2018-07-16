@@ -22,7 +22,7 @@ public class QQRestfulApiProviderController {
 
     @RequestMapping("fans/{qq}")
     public List<QQAccount> fans(@PathVariable("qq") String qq){
-        return InMemoryQQDatabase.database.get(qq).fans();
+        return InMemoryQQDatabase.database.get(qq).getFans();
     }
 
 

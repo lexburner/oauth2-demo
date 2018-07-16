@@ -1,5 +1,6 @@
 package moe.cnkirito.security.oauth2.code.endpoint;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -13,9 +14,9 @@ import java.util.List;
  * Date 2018-04-25
  */
 @Data
-@Accessors(fluent = true, chain = true)
 @EqualsAndHashCode(of = "qq")
 @ToString(exclude = "fans")
+@Builder
 public class QQAccount {
 
     private String qq;

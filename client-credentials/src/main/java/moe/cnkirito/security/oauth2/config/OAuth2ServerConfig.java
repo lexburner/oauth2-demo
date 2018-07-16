@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 /**
@@ -49,7 +50,7 @@ public class OAuth2ServerConfig {
                     .anonymous()
                     .and()
                     .authorizeRequests()
-//                    .antMatchers("/product/**").access("#oauth2.hasScope('select') and hasRole('ROLE_USER')")
+                    .antMatchers("/product/**").access("#oauth2.hasScope('select') and hasPermission('delete')")
                     .antMatchers("/order/**").authenticated();//配置order访问控制，必须认证过后才可以访问
             // @formatter:on
         }
@@ -88,6 +89,7 @@ public class OAuth2ServerConfig {
         public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
             endpoints
                     .tokenStore(new RedisTokenStore(redisConnectionFactory))
+                    .tokenStore(new InMemoryTokenStore())
                     .authenticationManager(authenticationManager)
                     .userDetailsService(userDetailsService)
                     // 2018-4-3 增加配置，允许 GET、POST 请求获取 token，即访问端点：oauth/token

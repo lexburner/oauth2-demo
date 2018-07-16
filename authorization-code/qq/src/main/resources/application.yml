@@ -1,9 +1,14 @@
 server:
   port: 8080
 
-spring:
-  redis:
-    host: 127.0.0.1
-    database: 0
+# 需要使用 redis 的话，放开这里
+#spring:
+#  redis:
+#    host: 127.0.0.1
+#    database: 0
 
+security:
+  oauth2:
+    resource:
+      filter-order: 3
 logging.level.org.springframework.security: DEBUG

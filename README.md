@@ -1,9 +1,83 @@
+2018-7-16 日更新
+
+### 新增授权码（authorization_code）模式使用说明
+
+1. 尝试直接访问 qq 信息
+
+```http
+http://localhost:8080/qq/info/250577914/
+```
+
+提示需要认证：
+
+```xml
+<oauth>
+	<error_description>
+		Full authentication is required to access this resource
+	</error_description>
+	<error>
+		unauthorized
+	</error>
+</oauth>
+```
+
+2. 尝试获取授权码
+
+```http
+http://localhost:8080/oauth/authorize?client_id=aiqiyi&response_type=code&redirect_uri=http://localhost:8081/aiqiyi/qq/redirect
+```
+
+接着被主过滤器拦截，302 跳转到登录页，因为 /oauth/authorize 端点是受保护的端点，必须登录的用户才能申请 code。
+
+3. 输入用户名和密码
+
+username=250577914
+
+passpord=123456
+
+如上用户名密码是交给 SpringSecurity 的主过滤器用来认证的
+
+4. 登录成功后，真正进行授权码的申请
+
+oauth/authorize 认证成功，会根据 redirect_uri 执行 302 重定向，并且带上生成的 code，注意重定向到的是 8001 端口，这个时候已经是另外一个应用了。
+
+```http
+localhost:8081/aiqiyi/qq/redirect?code=xxxx
+```
+
+代码中封装了一个 http 请求，使得 aiqiyi 使用 restTemplate 向 qq 发送 token 的申请，当然是使用 code 来申请的，并最终成功获取到 access_token
+
+```json
+{
+	"access_token":"9f54d26f-5545-4eba-a124-54e6355dbe69",
+	"token_type":"bearer",
+	"refresh_token":"f7c176a6-e949-41fa-906d-0dedb0f0c1f7",
+	"expires_in":42221,
+	"scope":"get_user_info get_fanslist"
+}
+```
+
+4. 携带 access_token 访问 qq 信息
+
+```http
+http://localhost:8080/qq/info/250577914?access_token=9f54d26f-5545-4eba-a124-54e6355dbe69
+```
+
+正常返回信息
+
+
+
+
+
 2018-4-25 日更新
 
 ### 新增授权码（authorization_code）模式配置示例
 
-尝试访问获取token
+尝试访问获取 token
+
+```http
 http://localhost:8080/oauth/authorize?client_id=aiqiyi&response_type=code&redirect_uri=http://localhost:8081/aiqiyi/qq/redirect
+```
 
 具体工作原理介绍有空再更新
 
@@ -126,46 +200,46 @@ oauth2根据使用场景不同，分成了4种模式
 主要的maven依赖如下
 
 	<!-- 注意是starter,自动配置 -->
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-security</artifactId>
-    </dependency>
-    <!-- 不是starter,手动配置 -->
-    <dependency>
-        <groupId>org.springframework.security.oauth</groupId>
-        <artifactId>spring-security-oauth2</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-    <!-- 将token存储在redis中 -->
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-data-redis</artifactId>
-    </dependency>
+	<dependency>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter-security</artifactId>
+	</dependency>
+	<!-- 不是starter,手动配置 -->
+	<dependency>
+	    <groupId>org.springframework.security.oauth</groupId>
+	    <artifactId>spring-security-oauth2</artifactId>
+	</dependency>
+	<dependency>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter-web</artifactId>
+	</dependency>
+	<!-- 将token存储在redis中 -->
+	<dependency>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter-data-redis</artifactId>
+	</dependency>
 
 我们给自己先定个目标，要干什么事？既然说到保护应用，那必须得先有一些资源，我们创建一个endpoint作为提供给外部的接口：
 	
 	@RestController
 	public class TestEndpoints {
-
+	
 	    @GetMapping("/product/{id}")
 	    public String getProduct(@PathVariable String id) {
 	        //for debug
 	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	        return "product id : " + id;
 	    }
-
+	
 	    @GetMapping("/order/{id}")
 	    public String getOrder(@PathVariable String id) {
 		    //for debug
 	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	        return "order id : " + id;
 	    }
-
-	}
 	
+	}
+
 暴露一个商品查询接口，后续不做安全限制，一个订单查询接口，后续添加访问控制。
 
 ### 配置资源服务器和授权服务器
@@ -204,8 +278,9 @@ oauth2根据使用场景不同，分成了4种模式
 	            // @formatter:on
 	        }
 	    }
-	
-	
+
+
+​	
 	    @Configuration
 	    @EnableAuthorizationServer
 	    protected static class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
@@ -263,19 +338,19 @@ oauth2根据使用场景不同，分成了4种模式
 planA：
 
 	@Bean
-    protected UserDetailsService userDetailsService(){
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.withUsername("user_1").password("123456").authorities("USER").build());
-        manager.createUser(User.withUsername("user_2").password("123456").authorities("USER").build());
-        return manager;
-    }
+	protected UserDetailsService userDetailsService(){
+	    InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+	    manager.createUser(User.withUsername("user_1").password("123456").authorities("USER").build());
+	    manager.createUser(User.withUsername("user_2").password("123456").authorities("USER").build());
+	    return manager;
+	}
 
 planB：
 
 	@Configuration
 	@EnableWebSecurity
 	public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
+	
 	    @Override
 	    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 	        auth.inMemoryAuthentication()
@@ -283,7 +358,7 @@ planB：
 	                .and()
 	                .withUser("user_2").password("123456").authorities("USER");
 	   }
-
+	
 	   @Bean
 	   @Override
 	   public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -363,11 +438,10 @@ client模式：
 `order id : 1`
 
 我们重点关注一下debug后，对资源访问时系统记录的用户认证信息，可以看到如下的debug信息
-
-password模式：
+#### password模式：
 ![password模式](http://img.blog.csdn.net/20170808145230975?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgxNTU0Ng==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
-client模式：
+#### client模式：
 ![client模式](http://img.blog.csdn.net/20170808145304794?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgxNTU0Ng==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 和我们的配置是一致的，仔细看可以发现两者的身份有些许的不同。想要查看更多的debug信息，可以选择下载demo代码自己查看，为了方便读者调试和验证，我去除了很多复杂的特性，基本实现了一个最简配置，涉及到数据库的地方也尽量配置到了内存中，这点记住在实际使用时一定要修改。
