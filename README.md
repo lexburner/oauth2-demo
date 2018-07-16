@@ -57,7 +57,7 @@ localhost:8081/aiqiyi/qq/redirect?code=xxxx
 }
 ```
 
-4. 携带 access_token 访问 qq 信息
+5. 携带 access_token 访问 qq 信息
 
 ```http
 http://localhost:8080/qq/info/250577914?access_token=9f54d26f-5545-4eba-a124-54e6355dbe69
@@ -65,9 +65,11 @@ http://localhost:8080/qq/info/250577914?access_token=9f54d26f-5545-4eba-a124-54e
 
 正常返回信息
 
-
-
-
+> 第 2，3 步为什么需要登录？因为资源服务器和认证服务器在一个应用之中，所以 SpringSecurity 的主过滤器链和 oauth2 的相关过滤器链可能会引发冲突，所以需要特别注意。
+>
+> 不想登录之后获取授权码可不可行？暂时博主还没有找到很好的方法做到：在同一个应用中不登录获取授权码，有实现的朋友欢迎发起 pull request。
+>
+> 注意：一次请求只会经过唯一一个过滤器链，详情见 FilterChainProxy 的实现。
 
 2018-4-25 日更新
 
