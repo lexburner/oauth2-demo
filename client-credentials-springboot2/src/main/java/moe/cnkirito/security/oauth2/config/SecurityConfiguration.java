@@ -85,6 +85,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        // 对 oauth2自动创建的接口  不做校验，这些接口用来  生成access_token，后续看源码
+        // 看这些自动创建的接口具体的逻辑
         // @formatter:off
         http
             .requestMatchers().anyRequest()
