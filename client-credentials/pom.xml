@@ -4,14 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.11.RELEASE</version>
+        <groupId>moe.cnkirito</groupId>
+        <artifactId>oauth2-demo</artifactId>
+        <version>1.0</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>moe.cnkirito</groupId>
     <artifactId>client-credentials</artifactId>
     <version>1.0.0.RELEASE</version>
     <packaging>jar</packaging>
